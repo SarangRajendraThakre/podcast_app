@@ -1,14 +1,60 @@
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Colors } from '../../utils/Constants';
 import { screenHeight, screenWidth } from '../../utils/Scaling';
 import CustomText from '../../components/ui/CustomText';
 import { navigate } from '../../utils/NavigationUtils';
+import { useMutation } from '@apollo/client';
+import { REGISTER_MUTATION } from '../../graphQL/queries';
 
-const LoginScreen = () => {
-    const [name, setName] = useState('');
+const RegisterScreen = () => {
+  const [name , setName] = useState('');
     const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
+
+
+  const [register,{loading , error}] = useMutation(REGISTER_MUTATION)
+
+
+const handleRegister = async () => {
+  try {
+    const lowerEmail = email.trim().toLowerCase(); // convert to lowercase
+
+    const { data } = await register({
+      variables: { name, email: lowerEmail, password },
+    });
+
+    if (data?.registerUser?.user) {
+      Alert.alert('Registration Success', 'Login Now!');
+      navigate('LoginScreen');
+    }
+  } catch (err) {
+  if (err instanceof Error) {
+    Alert.alert('Registration failed', error?.message || err.message);
+  } else {
+    Alert.alert('Registration failed', error?.message || 'Something went wrong.');
+  }
+}
+
+};
+
+
+  useEffect(() => {
+  fetch('http://192.168.185.188:3000/api/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: '{ __typename }',
+    }),
+  })
+    .then(res => res.json())
+    .then(data => console.log('GraphQL response:', data))
+    .catch(err => console.error('Network error:', err));
+}, []);
+
+
   return (
     <View style={styles.container}>
       <Image
@@ -44,13 +90,20 @@ const [password, setPassword] = useState('');
   onChangeText={setPassword}
 />
 
+{
+  error && (
+    <CustomText style={{color : 'red'}} >Error :  {error.message}</CustomText>
+  )
+}
+
 <TouchableOpacity
   style={styles.button}
-  onPress={()=>{}}
+  onPress={handleRegister}
+  disabled={loading}
 
 >
   <CustomText variant="h5" style={styles.buttonText}>
-    {false ? 'Registering....' : 'Register'}
+    {loading ? 'Registering....' : 'Register'}
   </CustomText>
 </TouchableOpacity>
 
@@ -115,4 +168,4 @@ signUpText: {
 
 });
 
-export default LoginScreen
+export default RegisterScreen

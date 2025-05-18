@@ -9,6 +9,8 @@ const SplashScreen = () => {
 
     useEffect(() => {
   const timeoutId = setTimeout(() => {
+
+    
     const token = mmkvStorage.getItem('token');
     if (token) {
       resetAndNavigate('UserBottomTab');

@@ -4,7 +4,8 @@ import { mmkvStorage } from '../state/storage';
 import { Platform } from 'react-native';
 
 // ✅ Replace with your actual local IP
-const LOCAL_IP = '192.168.185.188';
+
+
 
 // ✅ Helper to check if running on emulator (basic check for Android)
 const isEmulator = () => {
@@ -16,12 +17,15 @@ const isEmulator = () => {
 };
 
 // ✅ Dynamically set URI
+const LOCAL_IP = '192.168.185.188';
+
 const uri =
   Platform.OS === 'ios'
-    ? 'http://localhost:3000/api/graphql' // iOS Simulator
-    : isEmulator()
-    ? 'http://10.0.2.2:3000/api/graphql' // Android Emulator
-    : `http://${LOCAL_IP}:3000/api/graphql`; // Real Android Device
+    ? 'http://localhost:3000/api/graphql'
+    : __DEV__
+    ? `http://${LOCAL_IP}:3000/api/graphql`
+    : 'https://your-production-api.com/graphql'; // 🔒 Use HTTPS for real app
+
 
 const httpLink = createHttpLink({ uri });
 

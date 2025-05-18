@@ -1,34 +1,65 @@
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Colors } from '../../utils/Constants';
 import { screenHeight, screenWidth } from '../../utils/Scaling';
 import CustomText from '../../components/ui/CustomText';
-import { navigate } from '../../utils/NavigationUtils';
+import { navigate, resetAndNavigate } from '../../utils/NavigationUtils';
 import { useMutation } from '@apollo/client';
-import { REGISTER_MUTATION } from '../../graphQL/queries';
+import { LOGIN_MUTATION } from '../../graphQL/queries';
+import { mmkvStorage } from '../../state/storage';
+import { usePlayerStore } from '../../state/usePlayerStore';
 
 const LoginScreen = () => {
-  const [name , setName] = useState('');
-    const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
+
+  const {setUser}=usePlayerStore();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+const[login , {loading , error}] = useMutation(LOGIN_MUTATION)
+
+useEffect(() => {
+  fetch('http://192.168.185.188:3000/api/graphql', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: '{ __typename }',
+    }),
+  })
+    .then(res => res.json())
+    .then(console.log)
+    .catch(err => console.error('Network error:', err));
+}, []);
 
 
-  const [register,{loading , error}] = useMutation(REGISTER_MUTATION)
+
+ const handleLogin = async () => {
+  try {
+    
+    const lowerEmail = email.trim().toLowerCase();
+    const { data } = await login({ variables: { email: lowerEmail, password } });
 
 
-  const handleRegister = async()=>{
-    try {
-      const {data} = await register({variables: {name , email , password}});
+    const token = data?.authenticateUserWithPassword?.sessionToken;
 
-      if(data?.registerUser?.user){
-        Alert.alert('Registration Success , Login Now!');
-        navigate('LoginScreen')
-      }
-      
-    } catch (err) {
-      Alert.alert('Registration failed', error?.message)
+    if (token) {
+      mmkvStorage.setItem('token', token);
+      setUser(data.authenticateUserWithPassword.item);
+      console.log("✅ Login successful");
+      navigate('UserBottomTab');
+    } else {
+      console.warn("❌ Login failed: No token");
+      Alert.alert('Login failed', 'Invalid credentials');
     }
+  } catch (err) {
+    console.error("🚨 GraphQL error:", error);
+    Alert.alert('Login failed', error?.message || error?.message);
   }
+};
+
+
+
 
 
   return (
@@ -45,12 +76,14 @@ const [password, setPassword] = useState('');
 
 
 
-   <TextInput
+<TextInput
+  value={email}
   style={styles.input}
   placeholder="Email"
   placeholderTextColor={Colors.text}
   onChangeText={setEmail}
 />
+
 
 <TextInput
   value={password}
@@ -61,22 +94,22 @@ const [password, setPassword] = useState('');
   onChangeText={setPassword}
 />
 
-{
-  error && (
-    <CustomText style={{color : 'red'}} ></CustomText>
-  )
-}
 
 <TouchableOpacity
   style={styles.button}
-  onPress={handleRegister}
+  onPress={handleLogin}
   disabled={loading}
-
 >
   <CustomText variant="h5" style={styles.buttonText}>
-    {false ? 'Logging in...' : 'Login'}
+    {loading ? 'Logging in...' : 'Login'}
   </CustomText>
 </TouchableOpacity>
+
+{
+  error && (
+    <CustomText style={{color : 'red'}} >Error :  {error.message}</CustomText>
+  )
+}
 
 
 <TouchableOpacity onPress={() => navigate('RegisterScreen')}>
@@ -84,9 +117,6 @@ const [password, setPassword] = useState('');
     Don't have an account? Sign Up
   </CustomText>
 </TouchableOpacity>
-
-
-
 
 
     </View>
