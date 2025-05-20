@@ -1,51 +1,36 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
-import React, { useEffect } from 'react'
-import { screenHeight, screenWidth } from '../../utils/Scaling';
-import { Colors } from '../../utils/Constants';
-import { mmkvStorage } from '../../state/storage';
+import React, { useEffect } from 'react';
+import { View, Image, StyleSheet } from 'react-native';
+
 import { resetAndNavigate } from '../../utils/NavigationUtils';
+import { mmkvStorage } from '../../state/storage';
+
 
 const SplashScreen = () => {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const token = mmkvStorage.getItem('accessToken');
+      const phone = mmkvStorage.getItem('phone');
 
-    useEffect(() => {
-  const timeoutId = setTimeout(() => {
+      if (token && phone) {
+        resetAndNavigate('Home', { phone });
+      } else {
+        resetAndNavigate('Login');
+      }
+    }, 1000);
 
-    
-    const token = mmkvStorage.getItem('token');
-    if (token) {
-      resetAndNavigate('UserBottomTab');
-    } else {
-      resetAndNavigate('LoginScreen');
-    }
-  }, 1000);
-
-  return () => clearTimeout(timeoutId);
-}, []);
-
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Image 
-        source={require('../../assets/icons/logo.png')}
-        style={styles.logoImage}
-      />
+      <Image source={require('../../assets/icons/profile.jpeg')} style={styles.logoImage} />
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.background,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logoImage: {
-    height: screenHeight * 0.6,
-    width: screenWidth * 0.6,
-    resizeMode: 'contain',
-  },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  logoImage: { width: 200, height: 200, resizeMode: 'contain' },
 });
 
-export default SplashScreen
+export default SplashScreen;

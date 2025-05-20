@@ -125,6 +125,9 @@ android {
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
+
+    implementation 'com.razorpay:checkout:1.6.33'
+
     implementation("com.facebook.react:react-android")
 
     if (hermesEnabled.toBoolean()) {

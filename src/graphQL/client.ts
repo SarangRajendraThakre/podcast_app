@@ -3,29 +3,20 @@ import { setContext } from '@apollo/client/link/context';
 import { mmkvStorage } from '../state/storage';
 import { Platform } from 'react-native';
 
-// ✅ Replace with your actual local IP
-
-
-
-// ✅ Helper to check if running on emulator (basic check for Android)
 const isEmulator = () => {
-  if (Platform.OS === 'android') {
-    // Android emulator uses 10.0.2.2 to access host
-    return true;
-  }
-  return false;
+  return Platform.OS === 'android';
 };
 
-// ✅ Dynamically set URI
-const LOCAL_IP = '192.168.185.188';
+const LOCAL_IP = '192.168.205.188'; // 🔁 Replace with your PC's IP
 
 const uri =
   Platform.OS === 'ios'
     ? 'http://localhost:3000/api/graphql'
     : __DEV__
     ? `http://${LOCAL_IP}:3000/api/graphql`
-    : 'https://your-production-api.com/graphql'; // 🔒 Use HTTPS for real app
+    : 'https://your-production-api.com/api/graphql';
 
+console.log('Apollo GraphQL URI =>', uri);
 
 const httpLink = createHttpLink({ uri });
 
