@@ -15,33 +15,37 @@ const LOGOUT = gql`
   }
 `;
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+type Props = NativeStackScreenProps<RootStackParamList>;
 
 const HomeScreen: React.FC<Props> = ({ navigation, route }) => {
 
-const phone = route.params?.phone ?? mmkvStorage.getItem('phone');
+const phone =  mmkvStorage.getItem('phone');
 
 console.log(phone);
 
 
   const [logout, { loading }] = useMutation(LOGOUT);
 
-  const handleLogout = async () => {
-    try {
-      const { data } = await logout({ variables: { phone } });
-      if (data.logout.success) {
-        Alert.alert('Success', data.logout.message);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Login' }],
-        });
-      } else {
-        Alert.alert('Error', data.logout.message);
-      }
-    } catch (error: any) {
-      Alert.alert('Error', error.message || 'Something went wrong');
+const handleLogout = async () => {
+  try {
+    const { data } = await logout({ variables: { phone } });
+    if (data.logout.success) {
+      // ✅ Remove access token from storage
+      mmkvStorage.removeItem('accessToken');
+
+      Alert.alert('Success', data.logout.message);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
+    } else {
+      Alert.alert('Error', data.logout.message);
     }
-  };
+  } catch (error: any) {
+    Alert.alert('Error', error.message || 'Something went wrong');
+  }
+};
 
   return (
     <View style={styles.container}>

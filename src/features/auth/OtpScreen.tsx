@@ -8,13 +8,14 @@ import { mmkvStorage } from '../../state/storage';
 type Props = NativeStackScreenProps<RootStackParamList, 'Otp'>;
 
 const VERIFY_OTP = gql`
-  mutation VerifyOtp($phone: String!, $code: String!) {
-    verifyOtp(phone: $phone, code: $code) {
-      success
-      message
-      token
-    }
+mutation Mutation($phone: String!, $code: String!) {
+  verifyOtp(phone: $phone, code: $code) {
+    accessToken
+    refreshToken
+    success
+    message
   }
+}
 `;
 
 const OtpScreen: React.FC<Props> = ({ route, navigation }) => {
@@ -31,7 +32,9 @@ const OtpScreen: React.FC<Props> = ({ route, navigation }) => {
     try {
       const { data } = await verifyOtp({ variables: { phone, code: otp } });
       if (data.verifyOtp.success) {
-        mmkvStorage.setItem('accessToken', data.verifyOtp.token);
+      const at =   mmkvStorage.setItem('accessToken', data.verifyOtp.accessToken);
+      const rt = mmkvStorage.setItem('refreshToken' , data.verifyOtp.refreshToken)
+      console.log(at , rt);
         navigation.reset({
           index: 0,
           routes: [{ name: 'Home', params: { phone } }],

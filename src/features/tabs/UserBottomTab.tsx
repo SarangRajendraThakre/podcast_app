@@ -14,7 +14,7 @@ const UserBottomTab: React.FC = () => {
         tabBarHideOnKeyboard: true,
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeScreen}/>
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="Favourite" component={FavouriteScreen} />
     </Tab.Navigator>

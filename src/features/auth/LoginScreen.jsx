@@ -36,7 +36,7 @@ const handleSendOtp = async () => {
     console.log("GraphQL Response:", data);
     if (data.sendOtp.success) {
   mmkvStorage.setItem('phone', formattedPhone);
-  navigation.navigate('OTP', { phone: formattedPhone });
+  navigation.navigate('Otp', { phone: formattedPhone });
 } else {
       Alert.alert('Error', data.sendOtp.message);
     }
