@@ -54,6 +54,10 @@
 		<string>Satoshi-Light.otf</string>
 		<string>Satoshi-Medium.otf</string>
 		<string>Satoshi-Regular.otf</string>
+		<string>AbrilFatface-Regular.ttf</string>
+		<string>AkayaKanadaka-Regular.ttf</string>
+		<string>AncizarSerif-Italic-VariableFont_wght.ttf</string>
+		<string>Roboto-VariableFont_wdth,wght.ttf</string>
 	</array>
 </dict>
 </plist>

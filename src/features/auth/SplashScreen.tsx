@@ -76,15 +76,15 @@ if (typeof newAccessToken === 'string' && typeof newRefreshToken === 'string') {
         
         else {
           console.log('Refresh token failed. Navigating to Login.');
-          resetAndNavigate('Login');
+          resetAndNavigate('OtpAuth');
         }
       } catch (err) {
         console.error('Refresh token mutation error:', err);
-        resetAndNavigate('Login');
+        resetAndNavigate('OtpAuth');
       }
     } else {
       console.log('No valid tokens found. Navigating to Login.');
-      resetAndNavigate('Login');
+      resetAndNavigate('OtpAuth');
     }
   };
 

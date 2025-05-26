@@ -10,6 +10,7 @@ import UserBottomTab from '../features/tabs/UserBottomTab';
 import HomeScreen from '../features/home/HomeScreen';
 import { RootStackParamList } from './types';
 import OtpScreen from '../features/auth/OtpScreen';
+import OTPAuthScreen from '../features/auth/OTPAuthScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,6 +23,7 @@ const Navigation = () => {
       }}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="OtpAuth" component={OTPAuthScreen} />
         <Stack.Screen name="Otp" component={OtpScreen} />
         <Stack.Screen name="UserBottomTab" component={UserBottomTab} />
       </Stack.Navigator>

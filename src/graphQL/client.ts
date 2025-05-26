@@ -9,12 +9,20 @@ const isEmulator = () => {
 
 const LOCAL_IP = '192.168.205.188'; // 🔁 Replace with your PC's IP
 
+// const uri =
+//   Platform.OS === 'ios'
+//     ? 'http://localhost:3000/api/graphql'
+//     : __DEV__
+//     ? `http://${LOCAL_IP}:3000/api/graphql`
+//     : 'https://your-production-api.com/api/graphql';
+
+
 const uri =
   Platform.OS === 'ios'
-    ? 'http://localhost:3000/api/graphql'
+    ? 'https://api.kavyaagri.in/'
     : __DEV__
-    ? `http://${LOCAL_IP}:3000/api/graphql`
-    : 'https://your-production-api.com/api/graphql';
+    ? `https://api.kavyaagri.in/`
+    : 'https://api.kavyaagri.in/';
 
 console.log('Apollo GraphQL URI =>', uri);
 
