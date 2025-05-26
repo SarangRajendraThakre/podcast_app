@@ -2,6 +2,22 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/AbrilFatface-Regular.ttf",
+      "sha1": "545553bf8733c6edc2846ba1b420f19e4a6ff2de"
+    },
+    {
+      "path": "src/assets/fonts/AkayaKanadaka-Regular.ttf",
+      "sha1": "6eeeb7d6c2e90e029f0f320a8567d7a598743cf6"
+    },
+    {
+      "path": "src/assets/fonts/AncizarSerif-Italic-VariableFont_wght.ttf",
+      "sha1": "0d862d95bedc2b427fc9a1e8820dd65a097d4946"
+    },
+    {
+      "path": "src/assets/fonts/Roboto-VariableFont_wdth,wght.ttf",
+      "sha1": "6bd9646ab22c0301ce3adbfe8707213a67900404"
+    },
+    {
       "path": "src/assets/fonts/Satoshi-Black.otf",
       "sha1": "d92baad4dab9ca55bc72f1a8a0a6de72829e709f"
     },
